@@ -4,13 +4,15 @@ application.py
 """
 
 from flask import Flask
+from flask_restful import Api
 
 
 def create_app(app_name='BONSAI_API'):
     app = Flask(app_name)
     app.config.from_object('bonsaiapi.config.BaseConfig')
 
-    from bonsaiapi.api import api
-    app.register_blueprint(api, url_prefix="/api")
+    api = Api(app)
+    from bonsaiapi.api import Cash
+    api.add_resource(Cash, '/api/cash/')
 
     return app
