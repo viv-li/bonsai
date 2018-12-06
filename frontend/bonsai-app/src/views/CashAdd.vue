@@ -63,7 +63,9 @@ export default {
       let confirmButton = this.$refs.confirm;
       confirmButton.classList.add("is-loading");
       this.$store
-        .dispatch("transferCash", parseFloat(this.transferAmount))
+        .dispatch("transferCash", {
+          transferAmount: parseFloat(this.transferAmount)
+        })
         .then(
           () => {
             confirmButton.innerHTML = "<i class='fas fa-check'></i>&nbsp;Done";

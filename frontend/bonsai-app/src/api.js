@@ -1,8 +1,6 @@
 import axios from "axios";
 
-const PF_NO_BRAINER = ["VFINX", "NAESX", "VGTSX", "VBMFX"];
-const AV_API_URL = "https://www.alphavantage.co/query?apikey=9G4G4R3GA5E5ENSZ&";
-
+const API_URL = "http://127.0.0.1:5000/api";
 // Fake data
 var cashValue = 500.31;
 var portfolio = {
@@ -28,12 +26,8 @@ var portfolio = {
   }
 };
 
-export function fetchCashValue(surveyId) {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      resolve(cashValue);
-    }, 300);
-  });
+export function fetchCashValue() {
+  return axios.get(`${API_URL}/cash/`);
 }
 
 export function fetchPortfolio() {
@@ -44,15 +38,6 @@ export function fetchPortfolio() {
   });
 }
 
-export function postTransferCash(transferAmount) {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      if (cashValue + transferAmount < 0) {
-        reject();
-      } else {
-        cashValue += transferAmount;
-        resolve();
-      }
-    }, 300);
-  });
+export function postTransferCash(transfer) {
+  return axios.post(`${API_URL}/cash/`, transfer);
 }

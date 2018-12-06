@@ -27,7 +27,7 @@ export default new Vuex.Store({
     // asynchronous operations
     loadCashValue(context) {
       return fetchCashValue().then(response =>
-        context.commit("setCashValue", { cashValue: response })
+        context.commit("setCashValue", { cashValue: response.data.cashValue })
       );
     },
     loadPortfolio(context) {
@@ -40,8 +40,8 @@ export default new Vuex.Store({
         context.commit("setStock", { stock: response })
       );
     },
-    transferCash(context, transferAmount) {
-      return postTransferCash(transferAmount);
+    transferCash(context, transfer) {
+      return postTransferCash(transfer);
     }
   }
 });
