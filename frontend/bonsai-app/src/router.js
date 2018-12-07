@@ -23,11 +23,20 @@ export default new Router({
     {
       path: "/cash/withdraw",
       name: "CashWithdraw",
-      // route level code-splitting
-      // this generates a separate chunk (.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
       component: () =>
         import(/* webpackChunkName: "CashWithdraw" */ "./views/CashWithdraw.vue")
+    },
+    {
+      path: "/stock/buy/:symbol",
+      name: "StockBuy",
+      component: () =>
+        import(/* webpackChunkName: "StockBuy" */ "./views/StockBuy.vue")
+    },
+    {
+      path: "/stock/sell/:symbol",
+      name: "StockSell",
+      component: () =>
+        import(/* webpackChunkName: "StockBuy" */ "./views/StockSell.vue")
     }
   ]
 });

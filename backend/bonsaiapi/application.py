@@ -14,7 +14,9 @@ def create_app(app_name='BONSAI_API'):
 
     cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
     api = Api(app)
-    from bonsaiapi.api import Cash
+    from bonsaiapi.api import Cash, Portfolio, Stock
     api.add_resource(Cash, '/api/cash/')
+    api.add_resource(Portfolio, '/api/portfolio/')
+    api.add_resource(Stock, '/api/stock/<symbol>')
 
     return app

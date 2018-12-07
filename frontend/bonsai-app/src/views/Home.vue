@@ -4,22 +4,24 @@
       <div class="hero-body">
         <div class="container">
           <div class="columns">
-            <div class="column" v-if="portfolioValue">
-              <h2 class="subtitle is-3">Total asset value</h2>
-              <h1 class="title is-1 is-spaced">
+            <div class="column">
+              <h2 class="subtitle is-3">Portfolio value</h2>
+              <h1 class="title is-1">
                 <span class="title is-3">$</span>
+                {{ portfolioValue.toFixed(2) }}
+              </h1>
+              <h3 class="subtitle is-5">(based on current stock prices)</h3>
+
+              <h2 class="subtitle is-5">Total asset value</h2>
+              <h1 class="title is-3">
+                <span class="title is-5">$</span>
                 {{ totalAssetValue.toFixed(2) }}
               </h1>
             </div>
             <div class="column">
-              <h2 class="subtitle is-6">Portfolio value (based on current stock prices)</h2>
-              <h1 class="title is-2 is-spaced">
-                <span class="title is-4">$</span>
-                {{ portfolioValue.toFixed(2) }}
-              </h1>
-              <h2 class="subtitle is-6">Cash balance</h2>
-              <h1 class="title is-2">
-                <span class="title is-4">$</span>
+              <h2 class="subtitle is-5">Cash balance</h2>
+              <h1 class="title is-3">
+                <span class="title is-5">$</span>
                 {{ cashValue.toFixed(2) }}
               </h1>
               <div class="buttons">
@@ -41,14 +43,14 @@
       </div>
     </section>
     <section class="section">
-      <div class="container">
-        <h1 class="title is-spaced">No-Brainer Portfolio</h1>
+      <div class="container" v-if="cashValue">
+        <h1 class="title is-spaced">Your Portfolio: The No-Brainer</h1>
         <p class="subtitle">A lazy portfolio for beginners who want to invest long-term.</p>
 
         <article class="message is-info">
           <div
             class="message-body"
-          >Put equal parts of your money into each of these stocks. That's literally it.</div>
+          >Put equal parts of your money into each of these. That's literally it.</div>
         </article>
         <div class="columns">
           <div class="column" v-for="(stock, symbol) in portfolio" :key="symbol">
@@ -57,29 +59,43 @@
                 <p class="card-header-title">{{ symbol }}</p>
               </header>
               <div class="card-content">
-                <p class="subtitle">
-                  Current price:
-                  <b>${{ stock.currValue }}</b>
-                </p>
-                <p class="subtitle">
-                  Shares owned:
-                  <b>{{ stock.quantity }}</b>
-                </p>
-                <p class="subtitle">
-                  Current value:
-                  <b class="has-text-primary">${{ stock.quantity * stock.currValue }}</b>
-                </p>
+                <div class="level">
+                  <div class="level-item has-text-centered">
+                    <div>
+                      <p class="heading">Current price</p>
+                      <p class="title">${{ stock.price.toFixed(2) }}</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="level">
+                  <div class="level-item has-text-centered">
+                    <div>
+                      <p class="heading">Shares owned</p>
+                      <p class="title">{{ stock.quantity }}</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="level">
+                  <div class="level-item has-text-centered">
+                    <div>
+                      <p class="heading">Current value</p>
+                      <p
+                        class="title has-text-primary"
+                      >${{ (stock.quantity * stock.price).toFixed(2) }}</p>
+                    </div>
+                  </div>
+                </div>
               </div>
               <footer class="card-footer">
                 <router-link
                   v-if="stock.quantity"
-                  :to="`stocks/${symbol}/sell`"
+                  :to="`stock/sell/${symbol}`"
                   class="card-footer-item has-text-danger"
                   tabindex="0"
                 >Sell</router-link>
                 <router-link
                   v-if="cashValue"
-                  :to="`stocks/${symbol}/buy`"
+                  :to="`stock/buy/${symbol}`"
                   class="card-footer-item has-text-primary"
                   tabindex="0"
                 >Buy</router-link>
@@ -87,6 +103,18 @@
             </div>
           </div>
         </div>
+      </div>
+      <div class="container" v-else>
+        <h1 class="title is-spaced">Your Portfolio: The No-Brainer</h1>
+        <p class="subtitle">A lazy portfolio for beginners who want to invest long-term.</p>
+
+        <article class="message is-info">
+          <div class="message-body">
+            <router-link :to="`cash/add`" tabindex="0">Add some cash</router-link>
+            <!---->
+            to begin investing! Start with as little as $500.
+          </div>
+        </article>
       </div>
     </section>
   </div>
@@ -100,15 +128,15 @@ export default {
   computed: mapState({
     cashValue: state => state.cashValue,
     portfolio: state => state.portfolio,
-    portfolioValue: function() {
+    portfolioValue(state) {
       let total = 0;
-      for (let symbol in this.portfolio) {
-        let stock = this.portfolio[symbol];
-        total += stock.quantity * stock.currValue;
+      for (let symbol in state.portfolio) {
+        let stock = state.portfolio[symbol];
+        total += stock.quantity * stock.price;
       }
       return total;
     },
-    totalAssetValue: function() {
+    totalAssetValue() {
       return this.cashValue + this.portfolioValue;
     }
   }),

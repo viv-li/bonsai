@@ -1,7 +1,12 @@
 import Vue from "vue";
 import Vuex from "vuex";
 
-import { fetchCashValue, fetchPortfolio, postTransferCash } from "./api";
+import {
+  fetchCashValue,
+  fetchPortfolio,
+  postTransferCash,
+  postTransferStock
+} from "./api";
 
 Vue.use(Vuex);
 
@@ -9,7 +14,12 @@ export default new Vuex.Store({
   state: {
     // single source of data
     cashValue: 0,
-    portfolio: []
+    portfolio: {
+      VFINX: { quantity: 0, price: 0 },
+      NAESX: { quantity: 0, price: 0 },
+      VGTSX: { quantity: 0, price: 0 },
+      VBMFX: { quantity: 0, price: 0 }
+    }
   },
   mutations: {
     // isolated data mutations
@@ -18,9 +28,6 @@ export default new Vuex.Store({
     },
     setPortfolio(state, payload) {
       state.portfolio = payload.portfolio;
-    },
-    setStock(state, payload) {
-      state.stock = payload.stock;
     }
   },
   actions: {
@@ -31,17 +38,15 @@ export default new Vuex.Store({
       );
     },
     loadPortfolio(context) {
-      return fetchPortfolio().then(response =>
-        context.commit("setPortfolio", { portfolio: response })
-      );
-    },
-    loadStock(context, symbol) {
-      return fetchStock(symbol).then(response =>
-        context.commit("setStock", { stock: response })
-      );
+      return fetchPortfolio().then(response => {
+        context.commit("setPortfolio", { portfolio: response.data.portfolio });
+      });
     },
     transferCash(context, transfer) {
       return postTransferCash(transfer);
+    },
+    transferStock(context, transfer) {
+      return postTransferStock(transfer.symbol, transfer.amount);
     }
   }
 });
