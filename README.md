@@ -8,9 +8,11 @@ Coming soon!
 
 ## Getting started
 
+Instructions for setup and running on your local machine.
+
 You need to have [npm](https://www.npmjs.com/get-npm) and [Python 3](https://www.python.org/downloads/) installed.
 
-```
+```bash
 # clone the project
 git clone https://github.com/viv-li/bonsai
 ```
@@ -19,7 +21,7 @@ git clone https://github.com/viv-li/bonsai
 
 Navigate to `frontend/bonsai-app/`
 
-```
+```bash
 # install dependencies
 npm install
 
@@ -34,14 +36,14 @@ npm run build
 
 In a new tab, navigate to `backend`, and make sure you have Python 3 running.
 
-```
+```bash
 # check which version of Python
 python --version
 ```
 
 If you're not running Python 3, you can [use a virtualenv](https://www.twilio.com/docs/usage/tutorials/how-to-set-up-your-python-and-flask-development-environment#start-a-new-project-with-virtualenv).
 
-```
+```bash
 # Follow instructions above to activate virtualenv is you need to
 
 # install dependencies
