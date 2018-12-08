@@ -27,6 +27,11 @@
         You want to withdraw
         <b>${{ parseFloat(transferAmount).toFixed(2) }}</b> from your Bonsai cash balance
       </p>
+      <article class="message is-danger" v-if="!hasEnoughMoney">
+        <div
+          class="message-body"
+        >Not enough money in your cash balance! You can withdraw up to ${{ parseFloat(cashValue).toFixed(2) }}</div>
+      </article>
       <a
         class="button is-large is-inverted is-outlined is-primary"
         @click="transferCash"
@@ -34,6 +39,7 @@
         role="button"
         tabindex="0"
         ref="confirm"
+        :disabled="!hasEnoughMoney"
       >Confirm</a>
     </div>
   </FormPage>
@@ -50,7 +56,10 @@ export default {
     return { transferAmount: "" };
   },
   computed: mapState({
-    cashValue: state => state.cashValue
+    cashValue: state => state.cashValue,
+    hasEnoughMoney(state) {
+      return this.transferAmount <= state.cashValue;
+    }
   }),
   beforeMount() {
     this.$store.dispatch("loadCashValue");
