@@ -4,7 +4,7 @@ A stock trading web app designed for beginners. Built for an interview coding ta
 
 ## Online demo
 
-Coming soon!
+[http://vivli.rocks](http://vivli.rocks)
 
 ## Getting started
 
